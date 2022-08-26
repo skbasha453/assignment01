@@ -1,0 +1,57 @@
+---
+title: "Assignment 01"
+author: "Shaik Basha Amhed Ghouse"
+date: "8/26/2022"
+output: 
+   html_document:
+          theme:
+              bootswatch: lumen
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+
+
+```{r}
+gun_deaths <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv")
+```
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(knitr)
+library(bslib)
+
+youth <- gun_deaths %>%
+  filter(age <= 65)
+```
+
+```{r, echo=FALSE, results='hide'}
+summary(youth)
+```
+
+```{r, echo=FALSE}
+# Inline code
+```
+We have data about `r nrow(gun_deaths)` individuals killed by guns. Only `r (nrow(gun_deaths) - nrow(youth))` are older than 65. The distribution of the remainder is shown below
+
+
+```{r youth-dist, echo=FALSE}
+youth %>% 
+  ggplot(aes(age)) +
+  geom_freqpoly(binwidth=1) +
+  labs(title="Distribution of gun deaths by age", x="Age", y="Count") +
+  theme_bw()
+```
+
+```{r, race-dist, echo=FALSE}
+youth %>%
+  ggplot(aes(fct_infreq(race) %>% fct_rev())) +
+  geom_bar() +
+  coord_flip() +
+  labs(title="Distribution of youths gun deaths by race", x="Victim race") +
+  theme_bw()
+```
+
